@@ -54,6 +54,48 @@ function setCoordinate(position) {
     xhr.send();
 }
 
+function join_text (arr) {
+    var text = '';
+
+    for(var a=0; a<arr.length; a++) {
+        // is it object?
+        
+        if(arr[a] === Object(arr[a])) {
+            var values = Object.values(arr[a]);
+
+            for(var c=0; c<values.length; c++) {
+                text += values[c];
+                console.log(values[c]);
+                
+            }
+        } else {
+            text += arr[a];
+        }
+    }
+
+    return text;
+}
+
+function categories_stringify(cat) {
+    var categories = '';
+    for(var i = 0; i < cat.length; i++) {
+        categories += cat[i].name;
+    }
+    return categories;
+}
+
+function randomize_comment(tips) {
+    // to be randomized
+    var comment = '';
+
+    if(typeof tips !== 'undefined' && tips.length >= 0) {
+        var rand = Math.floor(Math.random() * ((tips.length-1) - 0 + 1)) + 0;
+        comment = tips[rand].text;
+    }
+    
+    return comment;
+}
+
 // Loads the app and render the view
 function loadApp(json) {
     // parse it so we can use it later
@@ -62,10 +104,35 @@ function loadApp(json) {
     var view = '<div class="panel panel-default"><div class="panel-body">';
 
         view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
+        view += '<hr />';
         
         // item groups
         for(var i = 0; i < obj.response.groups.length; i++) {
-            
+            var items = obj.response.groups[i].items;
+
+            for(var j=0; j<items.length; j++) {
+                var venue = items[j].venue;
+                var tips = items[j].tips;
+
+                var venue_name = venue.name;
+                var venue_contact = venue.contact.formattedPhone == 'undefined' ? venue.contact.formattedPhone : '-';
+                var venue_location = venue.location.formattedAddress;
+                var venue_categories = categories_stringify(venue.categories);
+                var venue_url = venue.url == 'undefined' ? venue.url : '-';
+                var venue_rating = venue.rating;
+                var venue_randomized_comment = randomize_comment(tips);
+
+                view += 
+                    '<p>Venue name: ' + venue_name + '</p>'
+                    + '<p>Venue contact: ' + venue_contact + '</p>' 
+                    + '<p>Venue location: ' + venue_location + '</p>' 
+                    + '<p>Venue categories: ' + venue_categories + '</p>' 
+                    + '<p>Venue URL: ' + venue_url + '</p>'
+                    + '<p>Venue rating: ' + venue_rating + '</p>'
+                    + '<p><em>What they say about this place...</em></p>'
+                    + '<blockquote><p>' + venue_randomized_comment + '</p></blockquote>'
+                    + '<hr />';
+            }
         }
 
     view += '</div></div>';
