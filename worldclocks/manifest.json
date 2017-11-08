@@ -1,0 +1,8 @@
+{
+  "description": "Get to know other cities date and time",
+  "homepage_url": "https://github.com/adriank09/ffwebext-grabcoffee/tree/master/worldclocks",
+  "manifest_version": 2,
+  "name": "World Clocks",
+  "permissions": ["cookies","tabs"],
+  "version": "1.0",
+}
