@@ -1,8 +1,18 @@
 {
+  "browser_action": {
+    "default_icon": "icons/icon.png",
+    "default_title": "World Clocks",
+    "default_popup": "worldclocks.html"
+  },
   "description": "Get to know other cities date and time",
   "homepage_url": "https://github.com/adriank09/ffwebext-grabcoffee/tree/master/worldclocks",
+  "icons": {
+    "48": "icons/icon.png",
+    "96": "icons/icon@2x.png"
+  },
   "manifest_version": 2,
   "name": "World Clocks",
-  "permissions": ["cookies","tabs"],
-  "version": "1.0",
+  "permissions": [ "cookies", "tabs" ],
+  "version": "1.0"
+
 }
