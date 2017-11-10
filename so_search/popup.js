@@ -19,15 +19,11 @@ function check_query(e) {
 	} else {
 		c = event.keyCode;
 	}
-	if (c == 13) {
+	if (c == 13 && query != '') {
 		search_stackoverflow(query);
 	}
 }
 
 document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById("so_search").addEventListener('keypress', check_query);
-});
-
-$("#search_button").click(function () {
-	check_query(this);
 });
