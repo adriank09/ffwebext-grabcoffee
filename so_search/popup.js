@@ -24,6 +24,14 @@ function check_query(e) {
 	}
 }
 
+document.getElementById("search_button").addEventListener("click", check_query_button);
+
+function check_query_button() {
+	query = document.getElementById("so_search").value;
+	if (query != '')
+		search_stackoverflow(query);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById("so_search").addEventListener('keypress', check_query);
 });
