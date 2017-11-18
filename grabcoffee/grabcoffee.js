@@ -13,6 +13,7 @@ var foursquare_client_ID = "R1SLWIBY31S4DXJ1CZ3SNZ1VBPMEKQ3DJ5LP5KX0FY3QRVST";
 var foursquare_client_secret ="CYENH2FDBSD2BLEEHBLQF2P1QTZKITQSUBLUID2AO5HQRA1M";
 var foursquare_area_radius = 1000;
 var foursquare_explore_section = "food";
+var GOOGLE_API_KEY = "AIzaSyCP2dnL9a8nJUMj1r-tQ-AKu8fyGnIRHdU";
 var this_longitude = '';
 var this_latitude = '';
 
@@ -36,7 +37,7 @@ function loadApp(json) {
     // parse it so we can use it later
     var obj = JSON.parse(json);
     // draw the view
-    var view = '<div class="panel panel-default"><div class="panel-body">';
+    var view = '<div class="panel panel-default"><div class="panel-body"><div class="container">';
 
     view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
     view += '<hr />';
@@ -57,6 +58,8 @@ function loadApp(json) {
             var venue_url = venue.url == 'undefined' ? venue.url : '-';
             var venue_rating = venue.rating;
             var venue_randomized_comment = randomize_comment(tips);
+            var venue_lat = venue.location.lat;
+            var venue_lng = venue.location.lng;
 
             view += 
             '<div class="row"><div class="col-sm-6">'    
@@ -68,20 +71,18 @@ function loadApp(json) {
                 + '<p>Venue rating: ' + venue_rating + '</p>'
                 + '<p><em>What they say about this place...</em></p>'
                 + '<blockquote><p>' + venue_randomized_comment + '</p></blockquote>'
-                + '<button class="btn btn-default" onclick="shareToFacebook(\''+venue_id+'\');">Share to Facebook!</button>'
-                
                 ;
         
             view += '</div>';
 
             view +=
-            + '<div class="col-sm-6">'
-            + '<div id="map">google maps</div>'
-            + '</div>';
+            '<div class="col-sm-6">'
+                + '<iframe src="' + getGoogleMapURL(venue_lat, venue_lng) + '"></iframe>'
+            + '</div></div>';
         }
     }
     
-    view += '</div></div>';
+    view += '</div>';
     
     // render it!
     app.innerHTML = view;
@@ -154,6 +155,10 @@ function randomize_comment(tips) {
 // Returns the Foursquare HTTP endpoint
 function getFoursquareExploreEndpoint(lat, long) {
     return "https://api.foursquare.com/v2/venues/explore?ll="+lat+","+long+"&section="+foursquare_explore_section+"&radius="+foursquare_area_radius+"&client_id="+foursquare_client_ID+"&client_secret="+foursquare_client_secret+"&v=20161016";
+}
+
+function getGoogleMapURL(lat, lng) {
+    return "https://www.google.com/maps/embed/v1/view?key="+GOOGLE_API_KEY+"&center="+lat+","+lng+"&zoom=18";
 }
 
 function getFoursquareEndpoint_VenueDetail(id) {
