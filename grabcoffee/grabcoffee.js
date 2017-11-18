@@ -1,4 +1,3 @@
-
 /*
     GrabCoffee
 
@@ -21,6 +20,10 @@ var app = document.getElementById('app');
 
 // Event
 window.onload = initApp();
+
+$(function() {
+    $('.slick').slick();
+});
 
 // Initialize the webext app
 function initApp() {
