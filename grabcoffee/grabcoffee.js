@@ -1,4 +1,4 @@
-'use strict';
+
 /*
     GrabCoffee
 
@@ -62,7 +62,7 @@ function loadApp(json) {
             var venue_lng = venue.location.lng;
 
             view += 
-            '<div class="row"><div class="col-sm-6">'    
+            '<div class="row slick"><div class="col-sm-6">'    
                 + '<p>Venue name: ' + venue_name + '</p>'
                 + '<p>Venue contact: ' + venue_contact + '</p>' 
                 + '<p>Venue location: ' + venue_location + '</p>' 
