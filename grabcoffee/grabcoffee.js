@@ -31,10 +31,76 @@ function initApp() {
 
 }
 
-// Returns the Foursquare HTTP endpoint
-function getFoursquareExploreEndpoint(lat, long) {
-    return "https://api.foursquare.com/v2/venues/explore?ll="+lat+","+long+"&section="+foursquare_explore_section+"&radius="+foursquare_area_radius+"&client_id="+foursquare_client_ID+"&client_secret="+foursquare_client_secret+"&v=20161016";
+// Loads the app and render the view
+function loadApp(json) {
+    // parse it so we can use it later
+    var obj = JSON.parse(json);
+    // draw the view
+    var view = '<div class="panel panel-default"><div class="panel-body">';
+
+    view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
+    view += '<hr />';
+    
+    // item groups
+    for(var i = 0; i < obj.response.groups.length; i++) {
+        var items = obj.response.groups[i].items;
+
+        for(var j=0; j<items.length; j++) {
+            var venue = items[j].venue;
+            var tips = items[j].tips;
+
+            var venue_id = venue.id;
+            var venue_name = venue.name;
+            var venue_contact = venue.contact.formattedPhone == 'undefined' ? venue.contact.formattedPhone : '-';
+            var venue_location = venue.location.formattedAddress;
+            var venue_categories = categories_stringify(venue.categories);
+            var venue_url = venue.url == 'undefined' ? venue.url : '-';
+            var venue_rating = venue.rating;
+            var venue_randomized_comment = randomize_comment(tips);
+
+            var share_url = '';
+           
+            // another XHR to get the canonical url for this venue
+            // var xhr = new XMLHttpRequest();
+            
+            // xhr.onreadystatechange = function (e) {
+            //     if(xhr.readyState === 4) {    
+            //         var object = JSON.parse(xhr.responseText);    
+            //         share_url = object.response.venue.canonicalUrl;
+            //         console.log(share_url);
+            //     }
+            // }
+            
+            // xhr.open('get', getFoursquareEndpoint_VenueDetail(venue_id));
+            // xhr.send();
+            // console.log(xhr.onload);
+            view += 
+                '<p>Venue name: ' + venue_name + '</p>'
+                + '<p>Venue contact: ' + venue_contact + '</p>' 
+                + '<p>Venue location: ' + venue_location + '</p>' 
+                + '<p>Venue categories: ' + venue_categories + '</p>' 
+                + '<p>Venue URL: ' + venue_url + '</p>'
+                + '<p>Venue rating: ' + venue_rating + '</p>'
+                + '<p><em>What they say about this place...</em></p>'
+                + '<blockquote><p>' + venue_randomized_comment + '</p></blockquote>'
+                + '<button class="btn btn-default" onclick="shareToFacebook(\''+venue_id+'\');">Share to Facebook!</button>'
+                ;
+                
+        
+            view += '<hr />';
+        }
+    }
+    
+    view += '</div></div>';
+    
+    // render it!
+    app.innerHTML = view;
 }
+
+/*
+*   Private functions
+*
+*/
 
 // inner function used by getLocation()
 function setCoordinate(position) {
@@ -85,7 +151,6 @@ function categories_stringify(cat) {
 }
 
 function randomize_comment(tips) {
-    // to be randomized
     var comment = '';
 
     if(typeof tips !== 'undefined' && tips.length >= 0) {
@@ -96,46 +161,28 @@ function randomize_comment(tips) {
     return comment;
 }
 
-// Loads the app and render the view
-function loadApp(json) {
-    // parse it so we can use it later
-    var obj = JSON.parse(json);
-    // draw the view
-    var view = '<div class="panel panel-default"><div class="panel-body">';
+// Returns the Foursquare HTTP endpoint
+function getFoursquareExploreEndpoint(lat, long) {
+    return "https://api.foursquare.com/v2/venues/explore?ll="+lat+","+long+"&section="+foursquare_explore_section+"&radius="+foursquare_area_radius+"&client_id="+foursquare_client_ID+"&client_secret="+foursquare_client_secret+"&v=20161016";
+}
 
-        view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
-        view += '<hr />';
-        
-        // item groups
-        for(var i = 0; i < obj.response.groups.length; i++) {
-            var items = obj.response.groups[i].items;
+function getFoursquareEndpoint_VenueDetail(id) {
+    return "https://api.foursquare.com/v2/venues/"+id+"?client_id="+foursquare_client_ID+"&client_secret="+foursquare_client_secret+"&v=20161016";
+}
 
-            for(var j=0; j<items.length; j++) {
-                var venue = items[j].venue;
-                var tips = items[j].tips;
+function shareToFacebook(id) {
+    var xhr = new XMLHttpRequest();
+    
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {   
+            var obj = JSON.parse(xhr.responseText);     
+            var share_url = 'https://www.facebook.com/sharer.php?u=' + obj.response.venue.canonicalUrl;
 
-                var venue_name = venue.name;
-                var venue_contact = venue.contact.formattedPhone == 'undefined' ? venue.contact.formattedPhone : '-';
-                var venue_location = venue.location.formattedAddress;
-                var venue_categories = categories_stringify(venue.categories);
-                var venue_url = venue.url == 'undefined' ? venue.url : '-';
-                var venue_rating = venue.rating;
-                var venue_randomized_comment = randomize_comment(tips);
-
-                view += 
-                    '<p>Venue name: ' + venue_name + '</p>'
-                    + '<p>Venue contact: ' + venue_contact + '</p>' 
-                    + '<p>Venue location: ' + venue_location + '</p>' 
-                    + '<p>Venue categories: ' + venue_categories + '</p>' 
-                    + '<p>Venue URL: ' + venue_url + '</p>'
-                    + '<p>Venue rating: ' + venue_rating + '</p>'
-                    + '<p><em>What they say about this place...</em></p>'
-                    + '<blockquote><p>' + venue_randomized_comment + '</p></blockquote>'
-                    + '<hr />';
-            }
+            tabs.create(share_url, '_blank');
         }
+    }
 
-    view += '</div></div>';
-    // render it!
-    app.innerHTML = view;
+    xhr.open('get', getFoursquareEndpoint_VenueDetail(id));
+    xhr.send();
+
 }
