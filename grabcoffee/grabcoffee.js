@@ -40,7 +40,7 @@ function loadApp(json) {
     var view = '';
     
     view += '<p class="lead">Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
-    
+    view += '<hr />';
     // draw the carousel
     // view += '<div id="itemCarousel" class="carousel" data-ride="carousel"><div class="carousel-inner">';
 
@@ -88,6 +88,8 @@ function loadApp(json) {
                 + '<iframe class="embed-responsive-item" src="' + getGoogleMapURL(venue_lat, venue_lng) + '"></iframe>'
                 + '</div>'
                 + '</div></div>';
+
+            view += '<hr />';
         }
     }
 
