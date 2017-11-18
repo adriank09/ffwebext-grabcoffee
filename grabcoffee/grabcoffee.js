@@ -39,7 +39,7 @@ function loadApp(json) {
     // draw the view
     var view = '';
     
-    view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
+    view += '<p class="lead">Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
     
     // draw the carousel
     view += '<div id="itemCarousel" class="carousel" data-ride="carousel"><div class="carousel-inner">';
@@ -68,6 +68,7 @@ function loadApp(json) {
             view += 
             '<div class="item'+active_class+'"><div class="row"><div class="col-sm-6">'    
                 + '<table class="table">'
+                + '<tr><td colspan="2" class="bg-info"><h4>Information</h4></td></tr>'
                 + '<tr><td><strong>Venue name</strong></td><td>' + venue_name + '</td></tr>'
                 + '<tr><td><strong>Venue contact</strong></td><td>' + venue_contact + '</td></tr>' 
                 + '<tr><td><strong>Venue location</strong></td><td>' + venue_location + '</td></tr>' 
@@ -75,7 +76,7 @@ function loadApp(json) {
                 + '<tr><td><strong>Venue URL</strong></td><td>' + venue_url + '</td></tr>'
                 + '<tr><td><strong>Venue rating</strong></td><td>' + venue_rating + '</td></tr>'
                 + '</table>'
-                + '<h4><em>What they say about this place...</em></h4>'
+                + '<h4>What they say about this place...</h4>'
                 + '<blockquote><h3>' + venue_randomized_comment + '</h3></blockquote>'
                 ;
         
