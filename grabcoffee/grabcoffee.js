@@ -58,24 +58,9 @@ function loadApp(json) {
             var venue_rating = venue.rating;
             var venue_randomized_comment = randomize_comment(tips);
 
-            var share_url = '';
-           
-            // another XHR to get the canonical url for this venue
-            // var xhr = new XMLHttpRequest();
-            
-            // xhr.onreadystatechange = function (e) {
-            //     if(xhr.readyState === 4) {    
-            //         var object = JSON.parse(xhr.responseText);    
-            //         share_url = object.response.venue.canonicalUrl;
-            //         console.log(share_url);
-            //     }
-            // }
-            
-            // xhr.open('get', getFoursquareEndpoint_VenueDetail(venue_id));
-            // xhr.send();
-            // console.log(xhr.onload);
             view += 
-                '<p>Venue name: ' + venue_name + '</p>'
+            '<div class="row"><div class="col-sm-6">'    
+                + '<p>Venue name: ' + venue_name + '</p>'
                 + '<p>Venue contact: ' + venue_contact + '</p>' 
                 + '<p>Venue location: ' + venue_location + '</p>' 
                 + '<p>Venue categories: ' + venue_categories + '</p>' 
@@ -84,10 +69,15 @@ function loadApp(json) {
                 + '<p><em>What they say about this place...</em></p>'
                 + '<blockquote><p>' + venue_randomized_comment + '</p></blockquote>'
                 + '<button class="btn btn-default" onclick="shareToFacebook(\''+venue_id+'\');">Share to Facebook!</button>'
-                ;
                 
+                ;
         
-            view += '<hr />';
+            view += '</div>';
+
+            view +=
+            + '<div class="col-sm-6">'
+            + '<div id="map">google maps</div>'
+            + '</div>';
         }
     }
     
@@ -178,7 +168,11 @@ function shareToFacebook(id) {
             var obj = JSON.parse(xhr.responseText);     
             var share_url = 'https://www.facebook.com/sharer.php?u=' + obj.response.venue.canonicalUrl;
 
-            tabs.create(share_url, '_blank');
+            browser.tabs.create({
+                "url": share_url
+            });
+
+
         }
     }
 
