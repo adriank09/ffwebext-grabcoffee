@@ -21,9 +21,6 @@ var app = document.getElementById('app');
 // Event
 window.onload = initApp();
 
-$(function() {
-    $('.slick').slick();
-});
 
 // Initialize the webext app
 function initApp() {
@@ -40,11 +37,13 @@ function loadApp(json) {
     // parse it so we can use it later
     var obj = JSON.parse(json);
     // draw the view
-    var view = '<div class="panel panel-default"><div class="panel-body"><div class="container">';
-
-    view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
-    view += '<hr />';
+    var view = '';
     
+    view += '<p>Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
+    
+    // draw the carousel
+    view += '<div id="itemCarousel" class="carousel" data-ride="carousel"><div class="carousel-inner">';
+
     // item groups
     for(var i = 0; i < obj.response.groups.length; i++) {
         var items = obj.response.groups[i].items;
@@ -63,29 +62,46 @@ function loadApp(json) {
             var venue_randomized_comment = randomize_comment(tips);
             var venue_lat = venue.location.lat;
             var venue_lng = venue.location.lng;
+            
+            var active_class = j === 0 ? ' active' : '';
 
             view += 
-            '<div class="row slick"><div class="col-sm-6">'    
-                + '<p>Venue name: ' + venue_name + '</p>'
-                + '<p>Venue contact: ' + venue_contact + '</p>' 
-                + '<p>Venue location: ' + venue_location + '</p>' 
-                + '<p>Venue categories: ' + venue_categories + '</p>' 
-                + '<p>Venue URL: ' + venue_url + '</p>'
-                + '<p>Venue rating: ' + venue_rating + '</p>'
-                + '<p><em>What they say about this place...</em></p>'
-                + '<blockquote><p>' + venue_randomized_comment + '</p></blockquote>'
+            '<div class="item'+active_class+'"><div class="row"><div class="col-sm-6">'    
+                + '<table class="table">'
+                + '<tr><td><strong>Venue name</strong></td><td>' + venue_name + '</td></tr>'
+                + '<tr><td><strong>Venue contact</strong></td><td>' + venue_contact + '</td></tr>' 
+                + '<tr><td><strong>Venue location</strong></td><td>' + venue_location + '</td></tr>' 
+                + '<tr><td><strong>Venue categories</strong></td><td>' + venue_categories + '</td></tr>'
+                + '<tr><td><strong>Venue URL</strong></td><td>' + venue_url + '</td></tr>'
+                + '<tr><td><strong>Venue rating</strong></td><td>' + venue_rating + '</td></tr>'
+                + '</table>'
+                + '<h4><em>What they say about this place...</em></h4>'
+                + '<blockquote><h3>' + venue_randomized_comment + '</h3></blockquote>'
                 ;
         
             view += '</div>';
 
             view +=
-            '<div class="col-sm-6">'
-                + '<iframe src="' + getGoogleMapURL(venue_lat, venue_lng) + '"></iframe>'
-            + '</div></div>';
+            '<div class="col-sm-6"><div class="embed-responsive embed-responsive-16by9">'
+                + '<iframe class="embed-responsive-item" src="' + getGoogleMapURL(venue_lat, venue_lng) + '"></iframe>'
+                + '</div>'
+                + '</div></div></div>';
         }
     }
-    
+
     view += '</div>';
+    
+    view +=
+        '<a class="left carousel-control" href="#itemCarousel" data-slide="prev">'
+        +  '<span class="glyphicon glyphicon-chevron-left"></span>'
+        +  '<span class="sr-only">Previous</span>'
+        +'</a>'
+        +'<a class="right carousel-control" href="#itemCarousel" data-slide="next">'
+        +  '<span class="glyphicon glyphicon-chevron-right"></span>'
+        +  '<span class="sr-only">Next</span>'
+        +'</a>';
+        
+    view += '';
     
     // render it!
     app.innerHTML = view;
