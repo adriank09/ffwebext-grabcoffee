@@ -165,23 +165,4 @@ function getFoursquareEndpoint_VenueDetail(id) {
     return "https://api.foursquare.com/v2/venues/"+id+"?client_id="+foursquare_client_ID+"&client_secret="+foursquare_client_secret+"&v=20161016";
 }
 
-function shareToFacebook(id) {
-    var xhr = new XMLHttpRequest();
-    
-    xhr.onreadystatechange = function() {
-        if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {   
-            var obj = JSON.parse(xhr.responseText);     
-            var share_url = 'https://www.facebook.com/sharer.php?u=' + obj.response.venue.canonicalUrl;
 
-            browser.tabs.create({
-                "url": share_url
-            });
-
-
-        }
-    }
-
-    xhr.open('get', getFoursquareEndpoint_VenueDetail(id));
-    xhr.send();
-
-}
