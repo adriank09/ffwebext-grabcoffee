@@ -77,7 +77,7 @@ function loadApp(json) {
                 + '<tr><td><strong>Venue rating</strong></td><td>' + venue_rating + '</td></tr>'
                 + '</table>'
                 + '<h4>What they say about this place...</h4>'
-                + '<blockquote><h3>' + venue_randomized_comment + '</h3></blockquote>'
+                + '<blockquote><p class="lead">' + venue_randomized_comment + '</p></blockquote>'
                 ;
         
             view += '</div>';
