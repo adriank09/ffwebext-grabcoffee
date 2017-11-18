@@ -42,7 +42,7 @@ function loadApp(json) {
     view += '<p class="lead">Here are some places to chill in <strong>' + obj.response.headerFullLocation + '</strong>!</p>';
     
     // draw the carousel
-    view += '<div id="itemCarousel" class="carousel" data-ride="carousel"><div class="carousel-inner">';
+    // view += '<div id="itemCarousel" class="carousel" data-ride="carousel"><div class="carousel-inner">';
 
     // item groups
     for(var i = 0; i < obj.response.groups.length; i++) {
@@ -66,7 +66,8 @@ function loadApp(json) {
             var active_class = j === 0 ? ' active' : '';
 
             view += 
-            '<div class="item'+active_class+'"><div class="row"><div class="col-sm-6">'    
+            //'<div class="item'+active_class+'">'
+            '<div class="row"><div class="col-sm-6">'    
                 + '<table class="table">'
                 + '<tr><td colspan="2" class="bg-info"><h4>Information</h4></td></tr>'
                 + '<tr><td><strong>Venue name</strong></td><td>' + venue_name + '</td></tr>'
@@ -80,27 +81,27 @@ function loadApp(json) {
                 + '<blockquote><p class="lead">' + venue_randomized_comment + '</p></blockquote>'
                 ;
         
-            view += '</div>';
+            view += '</div>'; // col-sm-6
 
             view +=
             '<div class="col-sm-6"><div class="embed-responsive embed-responsive-16by9">'
                 + '<iframe class="embed-responsive-item" src="' + getGoogleMapURL(venue_lat, venue_lng) + '"></iframe>'
                 + '</div>'
-                + '</div></div></div>';
+                + '</div></div>';
         }
     }
 
     view += '</div>';
     
-    view +=
-        '<a class="left carousel-control" href="#itemCarousel" data-slide="prev">'
-        +  '<span class="glyphicon glyphicon-chevron-left"></span>'
-        +  '<span class="sr-only">Previous</span>'
-        +'</a>'
-        +'<a class="right carousel-control" href="#itemCarousel" data-slide="next">'
-        +  '<span class="glyphicon glyphicon-chevron-right"></span>'
-        +  '<span class="sr-only">Next</span>'
-        +'</a>';
+    // view +=
+    //     '<a class="left carousel-control" href="#itemCarousel" data-slide="prev">'
+    //     +  '<span class="glyphicon glyphicon-chevron-left"></span>'
+    //     +  '<span class="sr-only">Previous</span>'
+    //     +'</a>'
+    //     +'<a class="right carousel-control" href="#itemCarousel" data-slide="next">'
+    //     +  '<span class="glyphicon glyphicon-chevron-right"></span>'
+    //     +  '<span class="sr-only">Next</span>'
+    //     +'</a>';
         
     view += '';
     
